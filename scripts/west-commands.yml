@@ -1,0 +1,6 @@
+west-commands:
+  - file: scripts/xiao_west_command.py
+    commands:
+      - name: xiao-flash
+        class: XiaoWestFlash
+        help: flash Xiao BLE Sense usinf UF2
