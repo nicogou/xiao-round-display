@@ -11,11 +11,11 @@
 #include <zephyr/bluetooth/uuid.h>
 #include <zephyr/bluetooth/gatt.h>
 #include <zephyr/bluetooth/hci.h>
-
+#include <zephyr/settings/settings.h>
 #include <zephyr/logging/log.h>
 
 #include <xiao_service.h>
-// #include <include/ble_xiaos_control.h>
+#include <ble_xiaos_control.h>
 
 #define STACKSIZE 512 // CONFIG_BT_NUS_THREAD_STACK_SIZE
 #define PRIORITY 7
