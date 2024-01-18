@@ -11,6 +11,7 @@ project(app LANGUAGES C)
 
 add_subdirectory(src/bluetooth)
 add_subdirectory(src/usb)
+add_subdirectory(src/display)
 
 target_include_directories(app PRIVATE src)
 
