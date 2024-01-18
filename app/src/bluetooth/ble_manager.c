@@ -1,4 +1,4 @@
-#include "include/ble_manager.h"
+#include "ble_manager.h"
 
 LOG_MODULE_REGISTER(BLE_MANAGER, LOG_LEVEL_DBG);
 

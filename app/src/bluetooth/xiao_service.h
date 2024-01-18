@@ -1,5 +1,4 @@
-#ifndef XIAO_SERVICE_H_
-#define XIAO_SERVICE_H_
+#pragma once
 
 /**
  * @file
@@ -127,9 +126,3 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-
-/**
- *@}
- */
-
-#endif /* XIAO_SERVICE_H_ */

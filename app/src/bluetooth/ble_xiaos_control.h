@@ -1,5 +1,4 @@
-#ifndef ble_xiaos_control_H_
-#define ble_xiaos_control_H_
+#pragma once
 
 #include <zephyr/kernel.h>
 #include <zephyr/sys/printk.h>
@@ -8,8 +7,7 @@
 #include <zephyr/logging/log.h>
 
 #include <main.h>
-#include <ble_manager.h>
-#include <xiao_service.h>
+#include "ble_manager.h"
 
 #include <hal/nrf_power.h>
 #include <stdlib.h>
@@ -30,5 +28,3 @@ typedef enum
 uint8_t ble_xiaos_control_process(const uint8_t *const data, uint16_t length);
 uint32_t ble_xiaos_control_queue(uint8_t opcode, uint8_t *data, uint8_t len);
 bool ble_xiaos_control_ready();
-
-#endif /* ble_xiaos_control_H_ */

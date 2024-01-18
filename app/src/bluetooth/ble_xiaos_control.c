@@ -1,4 +1,4 @@
-#include <ble_xiaos_control.h>
+#include "ble_xiaos_control.h"
 
 LOG_MODULE_REGISTER(ble_xiaos_control, LOG_LEVEL_DBG);
 

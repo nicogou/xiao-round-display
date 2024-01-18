@@ -9,12 +9,11 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 
 project(app LANGUAGES C)
 
-target_include_directories(app PRIVATE src/include)
-target_include_directories(app PRIVATE src/lib/usb)
-target_include_directories(app PRIVATE src/lib/services)
+add_subdirectory(src/bluetooth)
+add_subdirectory(src/usb)
+
+target_include_directories(app PRIVATE src)
 
 # Files from application
 FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE ${app_sources})
-target_sources(app PRIVATE src/lib/USB/cdc.c)
-target_sources(app PRIVATE src/lib/services/xiao_service.c)

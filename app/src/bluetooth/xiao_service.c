@@ -1,4 +1,4 @@
-#include <xiao_service.h>
+#include "xiao_service.h"
 
 LOG_MODULE_REGISTER(xiao_service, LOG_LEVEL_DBG);
 

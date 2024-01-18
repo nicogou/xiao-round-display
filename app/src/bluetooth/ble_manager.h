@@ -1,5 +1,4 @@
-#ifndef BLE_MANAGER_H_
-#define BLE_MANAGER_H_
+#pragma once
 
 #include <zephyr/types.h>
 #include <zephyr/kernel.h>
@@ -14,8 +13,8 @@
 #include <zephyr/settings/settings.h>
 #include <zephyr/logging/log.h>
 
-#include <xiao_service.h>
-#include <ble_xiaos_control.h>
+#include "xiao_service.h"
+#include "ble_xiaos_control.h"
 
 #define STACKSIZE 512 // CONFIG_BT_NUS_THREAD_STACK_SIZE
 #define PRIORITY 7
@@ -34,5 +33,3 @@ uint32_t ble_manager_start_advertising();
 uint32_t ble_manager_stop_advertising();
 bool ble_manager_is_connected();
 bool ble_manager_control_is_subscribed();
-
-#endif /* BLE_MANAGER_H_ */
