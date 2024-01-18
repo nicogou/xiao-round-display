@@ -170,7 +170,7 @@ static void bt_receive_cb(struct bt_conn *conn, const uint8_t *const data,
 
     bt_addr_le_to_str(bt_conn_get_dst(conn), addr, ARRAY_SIZE(addr));
 
-    // ble_xiaos_control_process(data, len);
+    ble_xiaos_control_process(data, len);
 }
 
 static void bt_subscribe_cb(enum xiao_service_send_status status)
