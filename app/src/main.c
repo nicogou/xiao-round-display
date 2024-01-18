@@ -10,6 +10,8 @@ void app_reset_to_uf2()
 
 int main(void)
 {
+	ble_manager_init();
+	ble_manager_start_advertising();
 	while(true){
 		LOG_INF("Hello World! %s - %s", CONFIG_BOARD, APP_VERSION_STRING);
 		k_sleep(K_SECONDS(1));

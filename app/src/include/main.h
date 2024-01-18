@@ -7,6 +7,8 @@
 #include <zephyr/logging/log.h>
 #include <app_version.h>
 
+#include <ble_manager.h>
+
 void app_reset_to_uf2();
 
 #endif
