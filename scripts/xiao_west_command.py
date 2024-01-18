@@ -64,7 +64,11 @@ The serial port can be specified, or a default can be used.''')
             if port_open:
                 log.inf("Switching Xiao BLE Sense to Bootloader mode...")
                 serialPort.write(b"Switch to Bootloader\r\n")
-                time.sleep(2)
+                count = 0
+                while (not os.path.exists(os.path.join('F:\\', 'CURRENT.UF2')) and count < 10):
+                    time.sleep(0.5)
+                    count+=1
+                    
 
         source = os.path.join(os.getcwd(), 'app', 'build',
                               'zephyr', 'zephyr.uf2')
