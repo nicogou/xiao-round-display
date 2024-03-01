@@ -1,0 +1,12 @@
+# Copyright (c) 2020 Qingsong Gou <gouqs@hotmail.com>
+# Copyright (c) 2022 Jakob Krantz <mail@jakobkrantz.se>
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig INPUT_CHSC6X
+	bool "Use out of tree CHSC6X capacitive touch panel driver"
+	default y
+	depends on DT_HAS_SEEEDROUNDDISPLAY_CHSC6X_ENABLED
+	select GPIO
+	select I2C
+	help
+	  Enable out of tree driver for CHSC6X touch panel.
