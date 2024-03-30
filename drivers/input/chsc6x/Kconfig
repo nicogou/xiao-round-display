@@ -5,7 +5,6 @@
 menuconfig INPUT_CHSC6X
 	bool "Use out of tree CHSC6X capacitive touch panel driver"
 	default y
-	depends on DT_HAS_SEEEDROUNDDISPLAY_CHSC6X_ENABLED
 	select GPIO
 	select I2C
 	help
