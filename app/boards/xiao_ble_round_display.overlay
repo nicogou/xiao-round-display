@@ -25,7 +25,6 @@
         reg = <0xa2 >;
     };
 
-    /* TODO: add touch screen CHSC6X device */
     chsc6x: chsc6x@2e {
         status = "okay";
         compatible = "seeedrounddisplay,chsc6x";
@@ -40,18 +39,30 @@
     pinctrl-0 = <&spi2_default>; // D13 D14 D15
     pinctrl-1 = <&spi2_sleep>;
     pinctrl-names = "default", "sleep";
-    cs-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;    // D1
+    cs-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 28 GPIO_ACTIVE_LOW>;    // D1, D2
 
     gc9a01: gc9a01@0 {
         compatible = "seeedrounddisplay,gc9a01";
         status = "okay";
         spi-max-frequency = <30000000>;
-        reg = <0>;
+        reg = <0>; // This will use the first CS pin in the cs-gpios list.
         width = <240>;
         height = <240>;
         bl-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>; // D6
         reset-gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>; // Not routed on display, but required by driver
         dc-gpios = <&gpio0 29 GPIO_ACTIVE_HIGH>; // D3
+    };
+
+    /* TODO: add SD device : https://docs.zephyrproject.org/latest/services/storage/disk/access.html#sd-card-support-via-spi */
+    sdhc0: sdhc@1 {
+        compatible = "zephyr,sdhc-spi-slot";
+        reg = <1>; // This will use the second CS pin in the cs-gpios list.
+        status = "okay";
+        mmc {
+            compatible = "zephyr,sdmmc-disk";
+            status = "okay";
+        };
+        spi-max-frequency = <24000000>;
     };
 };
 
