@@ -6,6 +6,15 @@
     chosen {
         zephyr,display = &gc9a01;
     };
+
+    lvgl_pointer {
+        compatible = "zephyr,lvgl-pointer-input";
+        input = <&chsc6x>;
+    };
+};
+
+&uart0 {
+    status = "disabled";
 };
 
 &i2c1 {
@@ -17,6 +26,12 @@
     };
 
     /* TODO: add touch screen CHSC6X device */
+    chsc6x: chsc6x@2e {
+        status = "okay";
+        compatible = "seeedrounddisplay,chsc6x";
+        reg = < 0x2e >;
+        irq-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+    };
 };
 
 &spi2 {

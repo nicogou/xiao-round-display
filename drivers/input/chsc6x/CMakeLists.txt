@@ -1,0 +1,1 @@
+zephyr_sources(input_chsc6x.c)
