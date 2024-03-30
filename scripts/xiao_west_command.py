@@ -33,7 +33,7 @@ The serial port can be specified, or a default can be used.''')
 
         # Add an option to speciofy the serial port you want to use.
         parser.add_argument('-p', '--port', help='COM port to which the Xiao is hooked on (optional)')
-        # parser.add_argument('required', help='a required argument')
+        parser.add_argument('-d', '--drive', help='Drive on which the bootloader hooks on on reboot (optional)')
 
         return parser           # gets stored as self.parser
 
@@ -45,14 +45,21 @@ The serial port can be specified, or a default can be used.''')
         #   required is BAR
         # log.inf('--optional is', args.optional)
         # log.inf('required is', args.required)
+        if args.drive == None:
+                args.drive = 'F:\\'
+                log.wrn("No bootloader drive specified, defaulting to " + args.drive + ".")
+        else:
+            args.drive = args.drive + '\\'
+        
         skip = False
-        if os.path.exists(os.path.join('F:\\', 'CURRENT.UF2')):
+        if os.path.exists(os.path.join(args.drive, 'CURRENT.UF2')):
             # Xiao already in bootloader mode. Skipping switching it to bootloader
             skip = True
         
         if skip == False:
             if args.port == None:
                 args.port = "COM9"
+                log.wrn("No serial port specified, defaulting to " + args.port + ".")
 
             port_open = True
             try:
@@ -65,16 +72,16 @@ The serial port can be specified, or a default can be used.''')
                 log.inf("Switching Xiao BLE Sense to Bootloader mode...")
                 serialPort.write(b"Switch to Bootloader\r\n")
                 count = 0
-                while (not os.path.exists(os.path.join('F:\\', 'CURRENT.UF2')) and count < 10):
+                while (not os.path.exists(os.path.join(args.drive, 'CURRENT.UF2')) and count < 10):
                     time.sleep(0.5)
                     count+=1
                     
 
         source = os.path.join(os.getcwd(), 'app', 'build',
                               'zephyr', 'zephyr.uf2')
-        dest = os.path.join('F:\\')
+        dest = os.path.join(args.drive)
 
-        if os.path.exists(os.path.join('F:\\', 'CURRENT.UF2')):
+        if os.path.exists(os.path.join(args.drive, 'CURRENT.UF2')):
             log.inf('Xiao BLE Sense in bootloader mode')
             if os.path.exists(os.path.join(os.getcwd(), 'app', 'build', 'zephyr', 'zephyr.uf2')):
                 log.inf('Flashing Xiao BLE Sense...')
