@@ -1,36 +1,14 @@
-# Xiao BLE Zephyr example application
+# Xiao Round display example application
 
-This repository contains an nRF Connect SDK example application specifically tuned for Xiao BLE (Sense) boards. The main
-purpose of this repository is to serve as a reference on how to structure nRF Connect
-SDK based applications. Some of the features demonstrated in this example are:
+This repository contains a Zephyr application to demonstrate the use of the Seeed Studio [Round display for Xiao][display] with a [Xiao BLE (Sense)][xiao_ble] board.
 
-- Basic [Zephyr application][app_dev] skeleton
-- [Zephyr workspace applications][workspace_app]
-- [Zephyr modules][modules]
-- [West T2 topology][west_t2]
-- [Custom boards][board_porting]
-- Custom [devicetree bindings][bindings]
-- Out-of-tree [drivers][drivers]
-- Out-of-tree libraries
-- Example CI configuration (using Github Actions)
-- Custom [west extension][west_ext]
+[display]: https://wiki.seeedstudio.com/get_start_round_display/
+[xiao_ble]: https://wiki.seeedstudio.com/XIAO_BLE/
 
-This repository is versioned together with the [nRF Connect SDK main tree][sdk-nrf]. This
-means that every time that nRF Connect SDK is tagged, this repository is tagged as well
-with the same version number, and the [manifest](west.yml) entry for `zephyr`
-will point to the corresponding nRF Connect SDK tag. For example, the `ncs-example-application`
-v2.5.0 will point to nRF Connect SDK v2.5.0. Note that the `main` branch always
-points to the development branch of nRF Connect SDK, also `main`.
+It uses custom drivers for :
 
-[app_dev]: https://docs.zephyrproject.org/latest/develop/application/index.html
-[workspace_app]: https://docs.zephyrproject.org/latest/develop/application/index.html#zephyr-workspace-app
-[modules]: https://docs.zephyrproject.org/latest/develop/modules.html
-[west_t2]: https://docs.zephyrproject.org/latest/develop/west/workspaces.html#west-t2
-[board_porting]: https://docs.zephyrproject.org/latest/guides/porting/board_porting.html
-[bindings]: https://docs.zephyrproject.org/latest/guides/dts/bindings.html
-[drivers]: https://docs.zephyrproject.org/latest/reference/drivers/index.html
-[sdk-nrf]: https://github.com/nrfconnect/sdk-nrf
-[west_ext]: https://docs.zephyrproject.org/latest/develop/west/extensions.html
+- TFT display GC9A01, based off of [Jakob Krantz work on ZSWatch](https://github.com/jakkra/ZSWatch/blob/main/app/drivers/display/gc9a01/gc9a01.c)
+- Touch screen controller CHSC6X, based on the [Seeed Studio Arduino library](https://github.com/Seeed-Studio/Seeed_Arduino_RoundDisplay)
 
 ## Getting started
 
@@ -41,12 +19,12 @@ Follow the official
 ### Initialization
 
 The first step is to initialize the workspace folder (``my-workspace``) where
-the ``example-application`` and all nRF Connect SDK modules will be cloned. Run the following
+the ``application`` and all nRF Connect SDK modules will be cloned. Run the following
 command:
 
 ```shell
 # initialize my-workspace for the ncs-example-application (main branch)
-west init -m https://github.com/nrfconnect/ncs-example-application --mr main my-workspace
+west init -m https://github.com/nicogou/xiao-round-display --mr main my-workspace
 # update nRF Connect SDK modules
 cd my-workspace
 west update
@@ -54,38 +32,16 @@ west update
 
 ### Building and running
 
-To build the application, run the following command:
-
-```shell
-west build -b $BOARD app
-```
-
-where `$BOARD` is the target board.
-
-You can use the `custom_plank` board found in this repository. Note that you can use
-Zephyr and nRF Connect SDK sample boards if an appropriate overlay is provided (see `app/boards`).
-
-A sample debug configuration is also provided. To apply it, run the following
-command:
-
-```shell
-west build -b $BOARD app -- -DOVERLAY_CONFIG=debug.conf
-```
+Build using nrf Connect for VSCode, specifying the correct overlay for the Xiao BLE Sense and the Round Display for Xiao.
 
 Once you have built the application, run the following command to flash it:
 
 ```shell
-west flash
+west xiao-flash -p COMx -d Y:
 ```
-
-This repo has a specific west command regarding Seeed Studio Xiao BLE and BLE Sense:
-
-```shell
-west xiao-flash
-```
-This command checks if a Xiao is plugged in and ready to receive a UF2 update. If not, it switches it into bootloader mode
-using the serial port, and proceeds with the flashing. This prevents the use of double-pressing the button each time you want to flash.
-
+Where COMx specifies the serial port the application is hooked on when running, and Y: is the drive that is mounted when the Xiao is in bootloader mode.
+This command checks if a Xiao already in bootloader mode is plugged in and ready to receive a UF2 update. If not, it switches it into bootloader mode
+using the serial port, and proceeds with the flashing.
 
 ### Testing
 
