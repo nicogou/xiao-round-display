@@ -21,7 +21,7 @@ struct chsc6x_output {
 	uint8_t points;
 	uint16_t x;
 	uint16_t y;
-};
+} __attribute__((packed));
 
 LOG_MODULE_REGISTER(chsc6x, CONFIG_INPUT_LOG_LEVEL);
 
@@ -44,17 +44,10 @@ static int chsc6x_process(const struct device *dev)
 		}
 
 	
-	LOG_HEXDUMP_DBG((uint8_t *)&output, sizeof(output), "Output from touch controller:");
-	col = sys_be16_to_cpu(output.x) & 0xffff;
-	row = sys_be16_to_cpu(output.y) & 0xffff;
-
-	// event = (output.x & 0xff) >> CHSC6X_EVENT_BITS_POS;
-	// is_pressed = (event == EVENT_CONTACT);
-
-	// LOG_DBG("Event: %u", event);
-	// LOG_DBG("Pressed: %u", is_pressed);
-
-	is_pressed = false;
+	is_pressed = output.points & 0xff;
+	col = sys_be16_to_cpu(output.x) & 0x00ff;
+	row = sys_be16_to_cpu(output.y) & 0x00ff;
+	LOG_DBG("Touched : %u - Column : %u - Row : %u", is_pressed, col, row);
 
 	if (is_pressed) {
 		// These events are generated for the LVGL touch implementation.
