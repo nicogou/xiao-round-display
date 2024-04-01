@@ -1,10 +1,17 @@
-/* This devicetree overlay file will be automatically picked by the Zephyr
- * build system when building the sample for the xiao_ble_sense board.
+/* This devicetree overlay file must be added when building for
+ * a Xiao board hooked to a Round display add-on.
  */
 
 / {
     chosen {
         zephyr,display = &gc9a01;
+    };
+
+    vbatt {
+        compatible = "voltage-divider";
+        io-channels = <&adc 0>;
+        output-ohms = <470000>;
+        full-ohms = <940000>;
     };
 
     lvgl_pointer {
