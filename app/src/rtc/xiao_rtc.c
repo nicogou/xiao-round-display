@@ -6,7 +6,7 @@ static const struct device *rtc_dev = DEVICE_DT_GET(XIAO_RTC);
 
 int xiao_rtc_get(struct rtc_time *t){
 	int err;
-	err = rtc_get_time(rtc_dev, &t);	
+	err = rtc_get_time(rtc_dev, t);	
 	if (err) {
 		LOG_ERR("Error getting time from rtc (%i)", err);
 	}
@@ -15,7 +15,7 @@ int xiao_rtc_get(struct rtc_time *t){
 
 int xiao_rtc_set(struct rtc_time *t){
 	int err;
-	err = rtc_set_time(rtc_dev, &t);	
+	err = rtc_set_time(rtc_dev, t);	
 	if (err) {
 		LOG_ERR("Error setting time from rtc (%i)", err);
 	}
