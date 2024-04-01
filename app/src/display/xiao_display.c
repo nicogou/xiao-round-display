@@ -21,6 +21,8 @@ static void lv_btn_click_callback(lv_event_t *e)
 	ARG_UNUSED(e);
 
 	count = 0;
+    sprintf(count_str, "%d", count / 1000U);
+    lv_label_set_text(count_label, count_str);
 }
 
 int display_main(){
