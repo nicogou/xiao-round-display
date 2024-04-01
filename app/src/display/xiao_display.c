@@ -44,14 +44,14 @@ int display_main(){
 
     while (1)
     {
-        if ((count % 100) == 0U)
+        if ((count % 1000) == 0U)
         {
-            sprintf(count_str, "%d", count / 100U);
+            sprintf(count_str, "%d", count / 1000U);
             lv_label_set_text(count_label, count_str);
         }
         lv_task_handler();
         ++count;
-        k_sleep(K_MSEC(10));
+        k_sleep(K_MSEC(1));
     }
 }
 
