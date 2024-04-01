@@ -11,6 +11,10 @@
         compatible = "zephyr,lvgl-pointer-input";
         input = <&chsc6x>;
     };
+
+    aliases {
+        rtc = &pcf8563;
+    };
 };
 
 &uart0 {
@@ -20,9 +24,10 @@
 &i2c1 {
     clock-frequency = < I2C_BITRATE_FAST >;
 
-    pcf8563: pcf8563@a2 {
+    pcf8563: pcf8563@51 {
+        status = "okay";
         compatible = "nxp,pcf8563";
-        reg = <0xa2 >;
+        reg = <0x51 >; // In some Arduino libraries found over the internet, the adress is 0x51 and not 0xa2 as found in the datasheet...
     };
 
     chsc6x: chsc6x@2e {

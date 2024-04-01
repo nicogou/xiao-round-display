@@ -7,7 +7,7 @@
 #include <app_version.h>
 
 #include "bluetooth/ble_manager.h"
-
+#include "rtc/xiao_rtc.h"
 #include "sd/sd.h"
 
 void app_reset_to_uf2();

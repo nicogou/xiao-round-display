@@ -13,6 +13,7 @@ add_subdirectory(src/bluetooth)
 add_subdirectory(src/usb)
 add_subdirectory(src/display)
 add_subdirectory(src/sd)
+add_subdirectory(src/rtc)
 
 target_include_directories(app PRIVATE src)
 
