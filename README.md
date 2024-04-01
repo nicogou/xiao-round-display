@@ -7,8 +7,13 @@ This repository contains a Zephyr application to demonstrate the use of the Seee
 
 It uses custom drivers for :
 
-- TFT display GC9A01, based off of [Jakob Krantz work on ZSWatch](https://github.com/jakkra/ZSWatch/blob/main/app/drivers/display/gc9a01/gc9a01.c)
+- TFT display GC9A01, based off of [Jakob Krantz' work on ZSWatch](https://github.com/jakkra/ZSWatch/blob/main/app/drivers/display/gc9a01/gc9a01.c)
 - Touch screen controller CHSC6X, based on the [Seeed Studio Arduino library](https://github.com/Seeed-Studio/Seeed_Arduino_RoundDisplay)
+
+It uses built-in Zephyr drivers for:
+
+- reading/writing to the SD card slot present on the display
+- using the PCF8563 RTC present on the display
 
 ## Getting started
 
@@ -23,7 +28,7 @@ the ``application`` and all nRF Connect SDK modules will be cloned. Run the foll
 command:
 
 ```shell
-# initialize my-workspace for the ncs-example-application (main branch)
+# initialize my-workspace for the application (main branch)
 west init -m https://github.com/nicogou/xiao-round-display --mr main my-workspace
 # update nRF Connect SDK modules
 cd my-workspace
