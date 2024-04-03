@@ -13,7 +13,7 @@ void xiao_display_init(){
 
 static uint32_t count;
 static char count_str[11] = {0};
-static lv_obj_t *hello_world_label;
+static lv_obj_t *btn1_label, *btn2_label, *btn3_label, *btn4_label;
 static lv_obj_t *count_label;
 
 static void lv_btn_click_callback(lv_event_t *e)
@@ -28,15 +28,35 @@ static void lv_btn_click_callback(lv_event_t *e)
 int display_main(){
     xiao_display_init();
 
-    lv_obj_t *hello_world_button;
+    lv_obj_t *btn1, *btn2, *btn3, *btn4;
 
-	hello_world_button = lv_btn_create(lv_scr_act());
-	lv_obj_align(hello_world_button, LV_ALIGN_CENTER, 0, -15);
-	lv_obj_add_event_cb(hello_world_button, lv_btn_click_callback, LV_EVENT_CLICKED,
-			    NULL);
-	hello_world_label = lv_label_create(hello_world_button);
-    lv_label_set_text(hello_world_label, "Hello world!");
-    lv_obj_align(hello_world_label, LV_ALIGN_CENTER, 0, 0);
+	btn1 = lv_btn_create(lv_scr_act());
+	lv_obj_align(btn1, LV_ALIGN_CENTER, -30, -30);
+	lv_obj_add_event_cb(btn1, lv_btn_click_callback, LV_EVENT_CLICKED, NULL);
+	btn1_label = lv_label_create(btn1);
+    lv_label_set_text(btn1_label, "1");
+    lv_obj_align(btn1_label, LV_ALIGN_CENTER, 0, 0);
+
+    btn2 = lv_btn_create(lv_scr_act());
+	lv_obj_align(btn2, LV_ALIGN_CENTER, -30, 30);
+	lv_obj_add_event_cb(btn1, lv_btn_click_callback, LV_EVENT_CLICKED, NULL);
+	btn2_label = lv_label_create(btn2);
+    lv_label_set_text(btn2_label, "2");
+    lv_obj_align(btn2_label, LV_ALIGN_CENTER, 0, 0);
+
+    btn3 = lv_btn_create(lv_scr_act());
+	lv_obj_align(btn3, LV_ALIGN_CENTER, 30, -30);
+	lv_obj_add_event_cb(btn3, lv_btn_click_callback, LV_EVENT_CLICKED, NULL);
+	btn3_label = lv_label_create(btn3);
+    lv_label_set_text(btn3_label, "3");
+    lv_obj_align(btn3_label, LV_ALIGN_CENTER, 0, 0);
+
+    btn4 = lv_btn_create(lv_scr_act());
+	lv_obj_align(btn4, LV_ALIGN_CENTER, 30, 30);
+	lv_obj_add_event_cb(btn4, lv_btn_click_callback, LV_EVENT_CLICKED, NULL);
+	btn4_label = lv_label_create(btn4);
+    lv_label_set_text(btn4_label, "4");
+    lv_obj_align(btn4_label, LV_ALIGN_CENTER, 0, 0);
 
     count_label = lv_label_create(lv_scr_act());
     lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
