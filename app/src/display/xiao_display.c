@@ -39,7 +39,7 @@ int display_main(){
 
     btn2 = lv_btn_create(lv_scr_act());
 	lv_obj_align(btn2, LV_ALIGN_CENTER, -30, 30);
-	lv_obj_add_event_cb(btn1, lv_btn_click_callback, LV_EVENT_CLICKED, NULL);
+	lv_obj_add_event_cb(btn2, lv_btn_click_callback, LV_EVENT_CLICKED, NULL);
 	btn2_label = lv_label_create(btn2);
     lv_label_set_text(btn2_label, "2");
     lv_obj_align(btn2_label, LV_ALIGN_CENTER, 0, 0);
