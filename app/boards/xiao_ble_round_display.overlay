@@ -17,6 +17,8 @@
     lvgl_pointer {
         compatible = "zephyr,lvgl-pointer-input";
         input = <&chsc6x>;
+        invert-x;
+        invert-y;
     };
 
     aliases {
@@ -44,7 +46,7 @@
         irq-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
         width = <240>;
         height = <240>;
-        rotation = <0>;
+        rotation = <90>;
     };
 };
 
@@ -66,7 +68,7 @@
         bl-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>; // D6
         reset-gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>; // Not routed on display, but required by driver
         dc-gpios = <&gpio0 29 GPIO_ACTIVE_HIGH>; // D3
-        rotation = <270>;
+        rotation = <0>;
     };
 
     /* TODO: add SD device : https://docs.zephyrproject.org/latest/services/storage/disk/access.html#sd-card-support-via-spi */
