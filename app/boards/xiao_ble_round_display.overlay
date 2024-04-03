@@ -44,9 +44,6 @@
         compatible = "seeedrounddisplay,chsc6x";
         reg = < 0x2e >;
         irq-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
-        width = <240>;
-        height = <240>;
-        rotation = <90>;
     };
 };
 
