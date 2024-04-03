@@ -6,6 +6,10 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/logging/log.h>
 
+#define DISPLAY_WIDTH         DT_INST_PROP(0, width)
+#define DISPLAY_HEIGHT        DT_INST_PROP(0, height)
+#define DISPLAY_ROTATION      DT_INST_PROP(0, rotation)
+
 struct chsc6x_config {
 	struct i2c_dt_spec i2c;
 	const struct gpio_dt_spec int_gpio;
@@ -25,9 +29,20 @@ struct chsc6x_output {
 
 LOG_MODULE_REGISTER(chsc6x, CONFIG_INPUT_LOG_LEVEL);
 
+static void chsc6x_convert_xy(uint16_t *x, uint16_t *y)
+{
+    uint16_t x_tmp = *x, y_tmp = *y, _end = 0;
+    for(int i=1; i<=DISPLAY_ROTATION/90; i++){
+        x_tmp = *x;
+        y_tmp = *y;
+        _end = (i % 2) ? DISPLAY_WIDTH : DISPLAY_HEIGHT;
+        *x = y_tmp;
+        *y = _end - x_tmp;
+    }
+}
+
 static int chsc6x_process(const struct device *dev)
 {
-	// uint8_t event;
 	uint16_t row, col;
 	bool is_pressed;
 
@@ -38,15 +53,18 @@ static int chsc6x_process(const struct device *dev)
 	int res = i2c_burst_read_dt(&cfg->i2c, 0, (uint8_t *)&output, sizeof(output));
 	
 	if (res < 0)
-		{
-			LOG_ERR("Could not read data %i", res);
-			return -ENODATA;
-		}
-
+	{
+		LOG_ERR("Could not read data %i", res);
+		return -ENODATA;
+	}
 	
 	is_pressed = output.points & 0xff;
 	col = sys_be16_to_cpu(output.x) & 0x00ff;
 	row = sys_be16_to_cpu(output.y) & 0x00ff;
+	if (is_pressed) {
+		chsc6x_convert_xy(&col, &row);
+	}
+	
 	LOG_DBG("Touched : %u - Column : %u - Row : %u", is_pressed, col, row);
 
 	if (is_pressed) {
