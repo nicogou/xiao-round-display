@@ -34,6 +34,7 @@ The serial port can be specified, or a default can be used.''')
         # Add an option to speciofy the serial port you want to use.
         parser.add_argument('-p', '--port', help='COM port to which the Xiao is hooked on (optional)')
         parser.add_argument('-d', '--drive', help='Drive on which the bootloader hooks on on reboot (optional)')
+        parser.add_argument('-b', '--build_dir', help='Name of the build folder where to look the UF2 file (defaults to build)')
 
         return parser           # gets stored as self.parser
 
@@ -45,6 +46,13 @@ The serial port can be specified, or a default can be used.''')
         #   required is BAR
         # log.inf('--optional is', args.optional)
         # log.inf('required is', args.required)
+        
+        if args.build_dir == None:
+            args.build_dir = 'build'
+            log.wrn("No build folder specified, defaulting to: \"" + args.build_dir + "\".")
+        else:
+            log.inf("Build folder: \"" + args.build_dir + "\"")
+        
         if args.drive == None:
                 args.drive = 'F:\\'
                 log.wrn("No bootloader drive specified, defaulting to " + args.drive + ".")
@@ -76,8 +84,7 @@ The serial port can be specified, or a default can be used.''')
                     time.sleep(0.5)
                     count+=1
                     
-
-        source = os.path.join(os.getcwd(), 'app', 'build',
+        source = os.path.join(os.getcwd(), 'app', args.build_dir,
                               'zephyr', 'zephyr.uf2')
         dest = os.path.join(args.drive)
 
