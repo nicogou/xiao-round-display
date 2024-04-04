@@ -18,6 +18,9 @@
         input = <&chsc6x_xiao_round_display>;
     };
 
+    aliases {
+        rtc = &pcf8563_xiao_round_display;
+    };
 };
 
 &xiao_serial {
