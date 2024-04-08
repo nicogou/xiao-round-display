@@ -46,24 +46,24 @@ The serial port can be specified, or a default can be used.''')
         #   required is BAR
         # log.inf('--optional is', args.optional)
         # log.inf('required is', args.required)
-        
+
         if args.build_dir == None:
             args.build_dir = 'build'
             log.wrn("No build folder specified, defaulting to: \"" + args.build_dir + "\".")
         else:
             log.inf("Build folder: \"" + args.build_dir + "\"")
-        
+
         if args.drive == None:
                 args.drive = 'F:\\'
                 log.wrn("No bootloader drive specified, defaulting to " + args.drive + ".")
         else:
             args.drive = args.drive + '\\'
-        
+
         skip = False
         if os.path.exists(os.path.join(args.drive, 'CURRENT.UF2')):
             # Xiao already in bootloader mode. Skipping switching it to bootloader
             skip = True
-        
+
         if skip == False:
             if args.port == None:
                 args.port = "COM9"
@@ -83,14 +83,14 @@ The serial port can be specified, or a default can be used.''')
                 while (not os.path.exists(os.path.join(args.drive, 'CURRENT.UF2')) and count < 10):
                     time.sleep(0.5)
                     count+=1
-                    
+
         source = os.path.join(os.getcwd(), 'app', args.build_dir,
                               'zephyr', 'zephyr.uf2')
         dest = os.path.join(args.drive)
 
         if os.path.exists(os.path.join(args.drive, 'CURRENT.UF2')):
             log.inf('Xiao BLE Sense in bootloader mode')
-            if os.path.exists(os.path.join(os.getcwd(), 'app', 'build', 'zephyr', 'zephyr.uf2')):
+            if os.path.exists(os.path.join(os.getcwd(), 'app', args.build_dir, 'zephyr', 'zephyr.uf2')):
                 log.inf('Flashing Xiao BLE Sense...')
                 if platform == 'linux':
                     os.system('cp ' + source + ' ' + dest)
