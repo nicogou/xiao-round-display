@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2024 Nicolas Goualard <nicolas.goualard@sfr.fr>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #define DT_DRV_COMPAT seeedrounddisplay_chsc6x
 
 #include <zephyr/sys/byteorder.h>
@@ -17,44 +23,38 @@ struct chsc6x_data {
 	struct gpio_callback int_gpio_cb;
 };
 
-struct chsc6x_output {
-	uint8_t points;
-	uint16_t x;
-	uint16_t y;
-} __attribute__((packed));
+#define CHSC6X_READ_ADDR 0
+#define CHSC6X_READ_LENGTH 5
+#define CHSC6X_OUTPUT_POINTS_PRESSED 0
+#define CHSC6X_OUTPUT_COL 2
+#define CHSC6X_OUTPUT_ROW 4
 
 LOG_MODULE_REGISTER(chsc6x, CONFIG_INPUT_LOG_LEVEL);
 
 static int chsc6x_process(const struct device *dev)
 {
-	uint16_t row, col;
+	uint8_t output[CHSC6X_READ_LENGTH];
+	uint8_t row, col;
 	bool is_pressed;
+	int ret;
 
-	struct chsc6x_output output;
 	const struct chsc6x_config *cfg = dev->config;
 
-	
-	int res = i2c_burst_read_dt(&cfg->i2c, 0, (uint8_t *)&output, sizeof(output));
-	
-	if (res < 0)
-	{
-		LOG_ERR("Could not read data %i", res);
+	ret = i2c_burst_read_dt(&cfg->i2c, CHSC6X_READ_ADDR, output, CHSC6X_READ_LENGTH);
+	if (ret < 0) {
+		LOG_ERR("Could not read data: %i", ret);
 		return -ENODATA;
 	}
-	
-	is_pressed = output.points & 0xff;
-	col = sys_be16_to_cpu(output.x) & 0x00ff;
-	row = sys_be16_to_cpu(output.y) & 0x00ff;
-	
-	LOG_DBG("Touched : %u - Column : %u - Row : %u", is_pressed, col, row);
+
+	is_pressed = output[CHSC6X_OUTPUT_POINTS_PRESSED];
+	col = output[CHSC6X_OUTPUT_COL];
+	row = output[CHSC6X_OUTPUT_ROW];
 
 	if (is_pressed) {
-		// These events are generated for the LVGL touch implementation.
 		input_report_abs(dev, INPUT_ABS_X, col, false, K_FOREVER);
 		input_report_abs(dev, INPUT_ABS_Y, row, false, K_FOREVER);
 		input_report_key(dev, INPUT_BTN_TOUCH, 1, true, K_FOREVER);
 	} else {
-		// This event is generated for the LVGL touch implementation.
 		input_report_key(dev, INPUT_BTN_TOUCH, 0, true, K_FOREVER);
 	}
 
@@ -76,10 +76,10 @@ static void chsc6x_isr_handler(const struct device *dev, struct gpio_callback *c
 }
 
 static int chsc6x_chip_init(const struct device *dev)
-{	
+{
 	const struct chsc6x_config *cfg = dev->config;
 
-	if (!device_is_ready(cfg->i2c.bus)) {
+	if (!i2c_is_ready_dt(&(cfg->i2c))) {
 		LOG_ERR("I2C bus %s not ready", cfg->i2c.bus->name);
 		return -ENODEV;
 	}
@@ -90,79 +90,48 @@ static int chsc6x_chip_init(const struct device *dev)
 static int chsc6x_init(const struct device *dev)
 {
 	struct chsc6x_data *data = dev->data;
-
+	int ret;
 	data->dev = dev;
 	k_work_init(&data->work, chsc6x_work_handler);
-
-	LOG_DBG("Initialize CHSC6X");
 
 	const struct chsc6x_config *config = dev->config;
 
 	if (!gpio_is_ready_dt(&config->int_gpio)) {
 		LOG_ERR("GPIO port %s not ready", config->int_gpio.port->name);
-		return -EIO;
+		return -ENODEV;
 	}
 
-	if (gpio_pin_configure_dt(&config->int_gpio, GPIO_INPUT) < 0) {
-		LOG_ERR("Could not configure interrupt GPIO pin");
-		return -EIO;
+	ret = gpio_pin_configure_dt(&config->int_gpio, GPIO_INPUT);
+	if (ret < 0) {
+		LOG_ERR("Could not configure interrupt GPIO pin: %d", ret);
+		return ret;
 	}
 
-	if (gpio_pin_interrupt_configure_dt(&config->int_gpio, GPIO_INT_EDGE_TO_ACTIVE) < 0) {
-		LOG_ERR("Could not configure interrupt GPIO interrupt.");
-		return -EIO;
+	ret = gpio_pin_interrupt_configure_dt(&config->int_gpio, GPIO_INT_EDGE_TO_ACTIVE);
+	if (ret < 0) {
+		LOG_ERR("Could not configure interrupt GPIO interrupt: %d", ret);
+		return ret;
 	}
 
 	gpio_init_callback(&data->int_gpio_cb, chsc6x_isr_handler, BIT(config->int_gpio.pin));
 
-	if (gpio_add_callback(config->int_gpio.port, &data->int_gpio_cb) < 0) {
-		LOG_ERR("Could not set gpio callback");
-		return -EIO;
+	ret = gpio_add_callback(config->int_gpio.port, &data->int_gpio_cb);
+	if (ret < 0) {
+		LOG_ERR("Could not set gpio callback: %d", ret);
+		return ret;
 	}
 
 	return chsc6x_chip_init(dev);
 };
 
-// #ifdef CONFIG_PM_DEVICE
-// static int chsc6x_pm_action(const struct device *dev, enum pm_device_action action)
-// {
-// 	const struct chsc6x_config *config = dev->config;
-// 	int status;
-
-// 	LOG_DBG("Status: %u", action);
-
-// 	switch (action) {
-// 		case PM_DEVICE_ACTION_SUSPEND: {
-// 			LOG_DBG("State changed to suspended");
-// 			if (device_is_ready(config->rst_gpio.port)) {
-// 				status = gpio_pin_set_dt(&config->rst_gpio, 1);
-// 			}
-
-// 			break;
-// 		}
-// 		case PM_DEVICE_ACTION_RESUME: {
-// 			LOG_DBG("State changed to active");
-// 			status = chsc6x_chip_init(dev);
-
-// 			break;
-// 		}
-// 		default: {
-// 			return -ENOTSUP;
-// 		}
-// 	}
-
-// 	return status;
-// }
-// #endif
-
-#define CHSC6X_DEFINE(index)                                                               \
-	static const struct chsc6x_config chsc6x_config_##index = {                           \
-		.i2c = I2C_DT_SPEC_INST_GET(index),                                                 \
-		.int_gpio = GPIO_DT_SPEC_INST_GET(index, irq_gpios),	            				\
-	};                                                                                      \
-	static struct chsc6x_data chsc6x_data_##index;                                        \
-	DEVICE_DT_INST_DEFINE(index, chsc6x_init, NULL, &chsc6x_data_##index,                 \
-						  &chsc6x_config_##index, POST_KERNEL, CONFIG_INPUT_INIT_PRIORITY, \
-						  NULL);
+#define CHSC6X_DEFINE(index)                                                                       \
+	static const struct chsc6x_config chsc6x_config_##index = {                                \
+		.i2c = I2C_DT_SPEC_INST_GET(index),                                                \
+		.int_gpio = GPIO_DT_SPEC_INST_GET(index, irq_gpios),                               \
+	};                                                                                         \
+	static struct chsc6x_data chsc6x_data_##index;                                             \
+	DEVICE_DT_INST_DEFINE(index, chsc6x_init, NULL, &chsc6x_data_##index,                      \
+			      &chsc6x_config_##index, POST_KERNEL, CONFIG_INPUT_INIT_PRIORITY,     \
+			      NULL);
 
 DT_INST_FOREACH_STATUS_OKAY(CHSC6X_DEFINE)
