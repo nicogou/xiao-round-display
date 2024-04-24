@@ -57,6 +57,7 @@
         pixel-format = <16>;
         width = <240>;
         height = <240>;
+		display-inversion;
     };
 
     sdhc_xiao_round_display: sdhc@1 {
