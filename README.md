@@ -1,3 +1,7 @@
+# Important Note:
+
+This branch uses a specific version of the seeed_xiao_round_display shield and GC9X01X driver. These are tracked in branch backlight of my fork of zephyr, and copy-pasted in this application zephyr folder, thus not visible here.
+
 # Xiao Round display example application
 
 This repository contains a Zephyr application to demonstrate the use of the Seeed Studio [Round display for Xiao][display] with a [Xiao BLE (Sense)][xiao_ble] board.
