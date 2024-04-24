@@ -1,2 +1,0 @@
-config SHIELD_XIAO_ROUND_DISPLAY
-	def_bool $(shields_list_contains,xiao_round_display)
