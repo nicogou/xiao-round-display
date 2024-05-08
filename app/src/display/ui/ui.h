@@ -7,6 +7,6 @@
 void ui_init();
 void ui_tick();
 
-void loadScreen(enum ScreensEnum screenId);
+// void loadScreen(enum ScreensEnum screenId);
 
 #endif // EEZ_LVGL_UI_GUI_H
