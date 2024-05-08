@@ -14,15 +14,17 @@
 
 #define unpack_uint32(b) (((b)[3] << 24) | ((b)[2] << 16) | ((b)[1] << 8) | (b)[0])
 #define unpack_uint16(b) (((b)[1] << 8) | (b)[0])
-#define unpack_uint8(b) (b[0])
+#define unpack_uint8(b)  (b[0])
 
 #define XIAO_CONTROL_DATA_MAX_LEN 20
-#define RESPONSE_BIT (0x80)
+#define RESPONSE_BIT              (0x80)
 
-typedef enum
-{
-    XIAO_SESSION_STOP,
-    XIAO_SESSION_START,
+#define XIAO_CONTROL_SET_GET_RTC_TIME (0x10)
+#define XIAO_CONTROL_RESET_TO_UF2     (0x7F)
+
+typedef enum {
+	XIAO_SESSION_STOP,
+	XIAO_SESSION_START,
 } session_event_data_t;
 
 uint8_t ble_xiaos_control_process(const uint8_t *const data, uint16_t length);
