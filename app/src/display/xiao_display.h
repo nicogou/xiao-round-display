@@ -11,6 +11,7 @@
 #include <string.h>
 #include <zephyr/kernel.h>
 #include <lvgl_input_device.h>
+#include <ui.h>
 
 #define XIAO_DISPLAY DT_CHOSEN(zephyr_display)
 
