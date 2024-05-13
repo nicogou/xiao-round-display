@@ -3,6 +3,10 @@
 
 #include <lvgl.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef EXT_IMG_DESC_T
 #define EXT_IMG_DESC_T
 typedef struct _ext_img_desc_t {
@@ -12,5 +16,9 @@ typedef struct _ext_img_desc_t {
 #endif
 
 extern const ext_img_desc_t images[1];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*EEZ_LVGL_UI_IMAGES_H*/
