@@ -101,7 +101,6 @@ bool create_some_entries(const char *base_path)
 static const char *disk_mount_pt = DISK_MOUNT_PT;
 
 void xiao_sd_init(){
-    
 	/* raw disk i/o */
 	do {
 		static const char *disk_pdrv = DISK_DRIVE_NAME;
