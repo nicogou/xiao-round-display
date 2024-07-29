@@ -16,8 +16,8 @@ int main(void)
 	xiao_sd_init();
 	xiao_rtc_init();
 
-	while(true){
-		LOG_INF("Hello World! %s - %s", CONFIG_BOARD, APP_VERSION_STRING);
+	LOG_INF("Hello World! %s - %s", CONFIG_BOARD, APP_VERSION_STRING);
+	while (true) {
 		k_sleep(K_SECONDS(1));
 	}
 	return 0;

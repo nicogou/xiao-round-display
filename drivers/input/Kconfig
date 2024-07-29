@@ -1,3 +1,0 @@
-if INPUT
-    rsource "chsc6x/Kconfig"
-endif

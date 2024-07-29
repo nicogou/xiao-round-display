@@ -9,10 +9,7 @@ This repository contains a Zephyr application to demonstrate the use of the Seee
 [display]: https://wiki.seeedstudio.com/get_start_round_display/
 [xiao_ble]: https://wiki.seeedstudio.com/XIAO_BLE/
 
-It uses custom drivers for :
-
-- TFT display GC9A01, based off of [Jakob Krantz' work on ZSWatch](https://github.com/jakkra/ZSWatch/blob/main/app/drivers/display/gc9a01/gc9a01.c)
-- Touch screen controller CHSC6X, based on the [Seeed Studio Arduino library](https://github.com/Seeed-Studio/Seeed_Arduino_RoundDisplay)
+It uses custom drivers for the touch screen controller CHSC6X, based on the [Seeed Studio Arduino library](https://github.com/Seeed-Studio/Seeed_Arduino_RoundDisplay)
 
 It uses built-in Zephyr drivers for:
 
@@ -51,6 +48,11 @@ west xiao-flash -p COMx -d Y:
 Where COMx specifies the serial port the application is hooked on when running, and Y: is the drive that is mounted when the Xiao is in bootloader mode.
 This command checks if a Xiao already in bootloader mode is plugged in and ready to receive a UF2 update. If not, it switches it into bootloader mode
 using the serial port, and proceeds with the flashing.
+
+By default this command looks for a zephyr.uf2 file in the `app/build` folder. If the build directory is different, you can specify it:
+```shell
+west xiao-flash -p COMx -d Y: -b build_dir
+```
 
 ### Testing
 
